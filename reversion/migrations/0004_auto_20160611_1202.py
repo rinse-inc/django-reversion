@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='version',
             name='db',
-            field=models.CharField(help_text='The database the model under version control is stored in.', max_length=191),
+            field=models.TextField(help_text='The database the model under version control is stored in.'),
         ),
         migrations.AlterUniqueTogether(
             name='version',

@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='version',
             name='object_id',
-            field=models.CharField(help_text='Primary key of the model under version control.', max_length=191),
+            field=models.TextField(help_text='Primary key of the model under version control.'),
         ),
         migrations.AlterField(
             model_name='revision',
