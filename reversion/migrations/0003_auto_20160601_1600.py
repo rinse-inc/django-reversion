@@ -101,7 +101,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='version',
             name='db',
-            field=models.CharField(null=True, help_text='The database the model under version control is stored in.', max_length=191),
+            field=models.TextField(null=True, help_text='The database the model under version control is stored in.'),
         ),
         migrations.RunPython(de_dupe_version_table),
         migrations.RunPython(set_version_db),
