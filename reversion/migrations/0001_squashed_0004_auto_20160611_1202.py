@@ -35,13 +35,13 @@ class Migration(migrations.Migration):
             name='Version',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('object_id', models.CharField(help_text='Primary key of the model under version control.', max_length=191)),
-                ('format', models.CharField(help_text='The serialization format used by this model.', max_length=255)),
+                ('object_id', models.TextField(help_text='Primary key of the model under version control.')),
+                ('format', models.TextField(help_text='The serialization format used by this model.')),
                 ('serialized_data', models.TextField(help_text='The serialized form of this version of the model.')),
                 ('object_repr', models.TextField(help_text='A string representation of the object.')),
                 ('content_type', models.ForeignKey(help_text='Content type of the model under version control.', on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType')),
                 ('revision', models.ForeignKey(help_text='The revision that contains this version.', on_delete=django.db.models.deletion.CASCADE, to='reversion.Revision')),
-                ('db', models.CharField(help_text='The database the model under version control is stored in.', max_length=191)),
+                ('db', models.TextField(help_text='The database the model under version control is stored in.')),
             ],
             options={
                 "ordering": ("-pk",)
