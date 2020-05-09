@@ -80,29 +80,59 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='revision',
-            name='manager_slug',
-        ),
-        migrations.RemoveField(
-            model_name='version',
-            name='object_id_int',
-        ),
-        migrations.AlterField(
-            model_name='version',
-            name='object_id',
-            field=models.TextField(help_text='Primary key of the model under version control.'),
-        ),
-        migrations.AlterField(
-            model_name='revision',
-            name='date_created',
-            field=models.DateTimeField(db_index=True, help_text='The date and time this revision was created.', verbose_name='date created'),
-        ),
-        migrations.AddField(
-            model_name='version',
-            name='db',
-            field=models.TextField(null=True, help_text='The database the model under version control is stored in.'),
-        ),
+        # migrations.RemoveField(
+        #     model_name='revision',
+        #     name='manager_slug',
+        # ),
+        # migrations.RemoveField(
+        #     model_name='version',
+        #     name='object_id_int',
+        # ),
+        # migrations.AlterField(
+        #     model_name='version',
+        #     name='object_id',
+        #     field=models.TextField(help_text='Primary key of the model under version control.'),
+        # ),
+        # migrations.AlterField(
+        #     model_name='revision',
+        #     name='date_created',
+        #     field=models.DateTimeField(db_index=True, help_text='The date and time this revision was created.', verbose_name='date created'),
+        # ),
+        # migrations.AddField(
+        #     model_name='version',
+        #     name='db',
+        #     field=models.TextField(null=True, help_text='The database the model under version control is stored in.'),
+        # ),
+        migrations.RunSQL("""
+        BEGIN;
+--
+-- Remove field manager_slug from revision
+--
+ALTER TABLE "reversion_revision" DROP COLUMN "manager_slug";
+--
+-- Remove field object_id_int from version
+--
+ALTER TABLE "reversion_version" DROP COLUMN "object_id_int";
+--
+-- Alter field object_id on version
+--
+--
+-- Alter field date_created on revision
+--
+--
+-- Add field db to version
+--
+ALTER TABLE "reversion_version" ADD COLUMN "db" text NULL;
+--
+-- MIGRATION NOW PERFORMS OPERATION THAT CANNOT BE WRITTEN AS SQL:
+-- Raw Python operation
+--
+--
+-- MIGRATION NOW PERFORMS OPERATION THAT CANNOT BE WRITTEN AS SQL:
+-- Raw Python operation
+--
+COMMIT;
+        """),
         migrations.RunPython(de_dupe_version_table),
         migrations.RunPython(set_version_db),
     ]
