@@ -26,7 +26,7 @@ def de_dupe_version_table(apps, schema_editor):
 
     print('keep_version_ids')
     print(keep_version_ids.query)
-    print(f'keep_version_ids.count(): {keep_version_ids.count()}')
+    # print(f'keep_version_ids.count(): {keep_version_ids.count()}')
 
     # Do not do anything if we're keeping all ids anyway.
     if keep_version_ids.count() == Version.objects.using(db_alias).all().count():
@@ -57,7 +57,7 @@ def set_version_db(apps, schema_editor):
         "content_type__model"
     ).distinct()
 
-    print(f'content_types.count(): {content_types.count()}')
+    print(f'len(content_types): {len(content_types)}')
     print(content_types.query)
 
     model_dbs = defaultdict(list)
