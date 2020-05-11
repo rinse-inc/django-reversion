@@ -23,14 +23,22 @@ def de_dupe_version_table(apps, schema_editor):
         # Add in the most recent id for each duplicate row.
         max_pk=models.Max("pk"),
     ).values_list("max_pk", flat=True)
+
+    print('keep_version_ids')
+    print(keep_version_ids.query)
+    print(f'keep_version_ids.count(): {keep_version_ids.count()}')
+
     # Do not do anything if we're keeping all ids anyway.
     if keep_version_ids.count() == Version.objects.using(db_alias).all().count():
         return
     # Delete all duplicate versions. Can't do this as a delete with subquery because MySQL doesn't like running a
     # subquery on the table being updated/deleted.
-    delete_version_ids = list(Version.objects.using(db_alias).exclude(
+    delete_version_ids = Version.objects.using(db_alias).exclude(
         pk__in=keep_version_ids,
-    ).values_list("pk", flat=True))
+    ).values_list("pk", flat=True)
+
+    print(f'delete_version_ids: {delete_version_ids.count()}')
+
     Version.objects.using(db_alias).filter(
         pk__in=delete_version_ids,
     ).delete()
@@ -48,6 +56,10 @@ def set_version_db(apps, schema_editor):
         "content_type__app_label",
         "content_type__model"
     ).distinct()
+
+    print(f'content_types.count(): {content_types.count()}')
+    print(content_types.query)
+
     model_dbs = defaultdict(list)
     for content_type_id, app_label, model_name in content_types:
         # We need to be able to access all models in the project, and we can't
