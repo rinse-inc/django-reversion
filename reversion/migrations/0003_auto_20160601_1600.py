@@ -57,9 +57,6 @@ def set_version_db(apps, schema_editor):
         "content_type__model"
     ).distinct()
 
-    print(f'len(content_types): {len(content_types)}')
-    print(content_types.query)
-
     model_dbs = defaultdict(list)
     for content_type_id, app_label, model_name in content_types:
         # We need to be able to access all models in the project, and we can't
@@ -86,29 +83,29 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RemoveField(
-            model_name='revision',
-            name='manager_slug',
-        ),
-        migrations.RemoveField(
-            model_name='version',
-            name='object_id_int',
-        ),
-        migrations.AlterField(
-            model_name='version',
-            name='object_id',
-            field=models.TextField(help_text='Primary key of the model under version control.'),
-        ),
-        migrations.AlterField(
-            model_name='revision',
-            name='date_created',
-            field=models.DateTimeField(db_index=True, help_text='The date and time this revision was created.', verbose_name='date created'),
-        ),
-        migrations.AddField(
-            model_name='version',
-            name='db',
-            field=models.TextField(null=True, help_text='The database the model under version control is stored in.'),
-        ),
+        # migrations.RemoveField(
+        #     model_name='revision',
+        #     name='manager_slug',
+        # ),
+        # migrations.RemoveField(
+        #     model_name='version',
+        #     name='object_id_int',
+        # ),
+        # migrations.AlterField(
+        #     model_name='version',
+        #     name='object_id',
+        #     field=models.TextField(help_text='Primary key of the model under version control.'),
+        # ),
+        # migrations.AlterField(
+        #     model_name='revision',
+        #     name='date_created',
+        #     field=models.DateTimeField(db_index=True, help_text='The date and time this revision was created.', verbose_name='date created'),
+        # ),
+        # migrations.AddField(
+        #     model_name='version',
+        #     name='db',
+        #     field=models.TextField(null=True, help_text='The database the model under version control is stored in.'),
+        # ),
 #         migrations.RunSQL("""
 #         BEGIN;
 # --
