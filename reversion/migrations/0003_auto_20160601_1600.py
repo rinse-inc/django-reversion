@@ -3,7 +3,7 @@
 from __future__ import unicode_literals
 
 from collections import defaultdict
-from django.db import DEFAULT_DB_ALIAS, migrations, models, router
+from django.db import migrations, models, router
 from django.apps import apps as live_apps
 
 
@@ -76,13 +76,7 @@ def set_version_db(apps, schema_editor):
         model_dbs[db].append(content_type_id)
     # Update db field.
     # speedup for case when there is only default db
-    if DEFAULT_DB_ALIAS in model_dbs and len(model_dbs) == 1:
-        Version.objects.using(db_alias).update(db=DEFAULT_DB_ALIAS)
-    else:
-        for db, content_type_ids in model_dbs.items():
-            Version.objects.using(db_alias).filter(
-                content_type__in=content_type_ids
-            ).update(db=db)
+    Version.objects.using(db_alias).update(db='default')
 
 
 class Migration(migrations.Migration):
@@ -92,29 +86,29 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # migrations.RemoveField(
-        #     model_name='revision',
-        #     name='manager_slug',
-        # ),
-        # migrations.RemoveField(
-        #     model_name='version',
-        #     name='object_id_int',
-        # ),
-        # migrations.AlterField(
-        #     model_name='version',
-        #     name='object_id',
-        #     field=models.TextField(help_text='Primary key of the model under version control.'),
-        # ),
-        # migrations.AlterField(
-        #     model_name='revision',
-        #     name='date_created',
-        #     field=models.DateTimeField(db_index=True, help_text='The date and time this revision was created.', verbose_name='date created'),
-        # ),
-        # migrations.AddField(
-        #     model_name='version',
-        #     name='db',
-        #     field=models.TextField(null=True, help_text='The database the model under version control is stored in.'),
-        # ),
+        migrations.RemoveField(
+            model_name='revision',
+            name='manager_slug',
+        ),
+        migrations.RemoveField(
+            model_name='version',
+            name='object_id_int',
+        ),
+        migrations.AlterField(
+            model_name='version',
+            name='object_id',
+            field=models.TextField(help_text='Primary key of the model under version control.'),
+        ),
+        migrations.AlterField(
+            model_name='revision',
+            name='date_created',
+            field=models.DateTimeField(db_index=True, help_text='The date and time this revision was created.', verbose_name='date created'),
+        ),
+        migrations.AddField(
+            model_name='version',
+            name='db',
+            field=models.TextField(null=True, help_text='The database the model under version control is stored in.'),
+        ),
 #         migrations.RunSQL("""
 #         BEGIN;
 # --
@@ -145,6 +139,6 @@ class Migration(migrations.Migration):
 # --
 # COMMIT;
 #         """),
-        migrations.RunPython(de_dupe_version_table),
+#         migrations.RunPython(de_dupe_version_table),
         migrations.RunPython(set_version_db),
     ]
