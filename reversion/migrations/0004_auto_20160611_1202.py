@@ -12,11 +12,6 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='version',
-            name='db',
-            field=models.CharField(help_text='The database the model under version control is stored in.', max_length=191),
-        ),
         migrations.AlterUniqueTogether(
             name='version',
             unique_together=set([('db', 'content_type', 'object_id', 'revision')]),
